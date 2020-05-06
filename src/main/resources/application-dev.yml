@@ -1,0 +1,50 @@
+server:
+  port: 8797
+  #关闭缓存
+thymeleaf:
+  cache: false
+
+spring:
+  datasource:
+    druid:
+      url: jdbc:mysql://39.98.127.112:3306/dataoncloud?useSSL=false&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+      username: root
+      password: yuhongyang
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      # 连接池配置
+      initial-size: 1
+      max-active: 20
+      min-idle: 1
+      max-wait: 10000
+      pool-prepared-statements: true
+      max-open-prepared-statements: 20
+      validation-query: SELECT 1 FROM DUAL
+      validation-query-timeout: 5000
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 30000
+      max-evictable-idle-time-millis: 60000
+      removeAbandoned: true
+      removeAbandonedTimeout: 1800
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat,wall #filters: #配置多个英文逗号分隔(统计，sql注入，log4j过滤)
+    type: com.alibaba.druid.pool.DruidDataSource
+  jackson:
+    default-property-inclusion: non_null
+
+#配置redis
+  redis:
+    host: 39.98.127.112
+    port: 6379
+    timeout: 50000
+    password: 879704116
+    database: 0
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
