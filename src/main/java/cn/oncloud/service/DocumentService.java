@@ -15,4 +15,8 @@ public interface DocumentService extends IService<Document> {
     IPage<Document> hallselectByDocname(Page<Document> page, String docName);
 
     Integer updateDocSharedById(Integer id, Integer shared);
+
+    IPage<Document> auditselectByDocname(Page<Document> page, String docName);
+
+    Integer updateDocAuditById(Integer id, Integer audit);
 }

@@ -178,4 +178,22 @@ public class DocumentController {
         return new ResponseEntity<>(ResultBean.ok(ResultConst.DEL_DOCUMENT_SUCC), HttpStatus.OK);
     }
 
+    @GetMapping("/auditdoclist")
+    @WebLog("审核文档列表接口")
+    public ResponseEntity auditlist(@RequestParam(name = "query", required = false) String docName,
+                                      @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+                                      @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
+        IPage<Document> page = documentService.auditselectByDocname(new Page<>(pageNum, pageSize), docName);
+        JSONObject resp = new JSONObject().fluentPut("total", page.getTotal());
+        resp.put("docs", page.getRecords());
+        return new ResponseEntity<>(ResultBean.ok(ResultConst.GET_DOCUMENTS_LIST_SUCC, resp), HttpStatus.OK);
+    }
+
+    @PutMapping("/auditdoclist/{id}/audit/{audit}")
+    @WebLog("审核文档接口")
+    public ResponseEntity updateAudit(@PathVariable Integer id, @PathVariable Integer audit) {
+        documentService.updateDocAuditById(id, audit);
+        return new ResponseEntity<>(ResultBean.ok(ResultConst.UPD_DOCUMENTS_AUDIT_SUCC), HttpStatus.OK);
+    }
+
 }

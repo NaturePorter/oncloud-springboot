@@ -38,4 +38,14 @@ public class DocumentServiceImpl extends ServiceImpl<DocumentMapper, Document> i
     public Integer updateDocSharedById(Integer id, Integer shared) {
         return documentMapper.updateDocSharedById(id, shared);
     }
+
+    @Override
+    public IPage<Document> auditselectByDocname(Page<Document> page, String docName) {
+        return documentMapper.auditselectByDocname(page, docName);
+    }
+
+    @Override
+    public Integer updateDocAuditById(Integer id, Integer audit) {
+        return documentMapper.updateUserStateById(id, audit);
+    }
 }

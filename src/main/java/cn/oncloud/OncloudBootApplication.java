@@ -33,12 +33,12 @@ public class OncloudBootApplication {
         return filter;
     }
 
-    /*@Bean
+    @Bean
     public FilterRegistrationBean xssFilter(){
         FilterRegistrationBean filter = new FilterRegistrationBean(new XssFilter());
         filter.addUrlPatterns("/api/*");
         filter.setName("xssFilter");
         filter.setOrder(2);
         return filter;
-    }*/
+    }
 }

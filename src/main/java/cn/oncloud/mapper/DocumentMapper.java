@@ -33,4 +33,16 @@ public interface DocumentMapper extends BaseMapper<Document> {
             "</if>",
             "</script>"})
     IPage<Document> hallselectByDocname(Page<Document> page, String docName);
+
+    @Select({"<script>",
+            "select d.id, d.docname, d.docsize, d.doclabel, d.docdescribe, d.downloadfrequency, d.uploadtime, d.uid, d.isaudit ",
+            "from oc_document d where d.isdelete = 0 and d.isaudit = 0",
+            "<if test='docName != null'>",
+            "and d.docname like concat ('%','${docName}','%') ",
+            "</if>",
+            "</script>"})
+    IPage<Document> auditselectByDocname(Page<Document> page, String docName);
+
+    @Update("UPDATE oc_document SET isaudit = ${audit} WHERE id = ${id}")
+    Integer updateUserStateById(Integer id, Integer audit);
 }
