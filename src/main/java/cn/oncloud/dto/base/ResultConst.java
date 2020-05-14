@@ -1,6 +1,10 @@
 package cn.oncloud.dto.base;
 
 
+/**
+ * @author 余弘洋
+ * 功能描述：执行结果字段
+ */
 public class ResultConst {
     public static final String LOGIN_SUCC = "登录成功";
     public static final String INVALID_TOKEN = "无效的token";

@@ -3,6 +3,9 @@ package cn.oncloud.dto.base;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author 余弘洋
+ */
 @Data
 @NoArgsConstructor
 public class ResultMeta {

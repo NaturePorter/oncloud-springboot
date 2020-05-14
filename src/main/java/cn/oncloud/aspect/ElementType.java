@@ -1,5 +1,9 @@
 package cn.oncloud.aspect;
 
+/**
+ * @author 余弘洋
+ */
+
 public enum ElementType {
     /** 类, 接口 (包括注释类型), 或 枚举 声明 */
     TYPE,
