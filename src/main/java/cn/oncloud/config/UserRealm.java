@@ -51,7 +51,7 @@ public class UserRealm extends AuthorizingRealm {
         }
         //密码认证由shiro来做
         SimpleAuthenticationInfo simpleAuthenticationInfo =
-                new SimpleAuthenticationInfo(user, user.getPassword(), "");
+                new SimpleAuthenticationInfo(user, user.getPassword(), user.getUsername());
         return simpleAuthenticationInfo;
     }
 }
