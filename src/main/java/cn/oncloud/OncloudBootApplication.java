@@ -22,23 +22,7 @@ public class OncloudBootApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(OncloudBootApplication.class, args);
+        System.out.println("启动成功");
     }
 
-    @Bean
-    public FilterRegistrationBean authorizeFilter(){
-        FilterRegistrationBean filter = new FilterRegistrationBean(new AuthorizeFilter());
-        filter.addUrlPatterns("/api/*");
-        filter.setName("authorizeFilter");
-        filter.setOrder(1);
-        return filter;
-    }
-
-    @Bean
-    public FilterRegistrationBean xssFilter(){
-        FilterRegistrationBean filter = new FilterRegistrationBean(new XssFilter());
-        filter.addUrlPatterns("/api/*");
-        filter.setName("xssFilter");
-        filter.setOrder(2);
-        return filter;
-    }
 }

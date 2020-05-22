@@ -11,6 +11,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -45,6 +48,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public String login(String username, String password) {
+        System.out.println("进入了登录方法");
         User user = null;
         try {
             LambdaQueryWrapper<User> queryWrapper = Wrappers.<User>lambdaQuery().eq(User::getUsername, username).eq(User::getPassword, password);
@@ -65,6 +69,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             //将token和用户信息存储到redis中
             String json = JSON.toJSONString(user);
             stringRedisTemplate.opsForValue().set(jwt, json, JwtUtil.JWT_TTL, TimeUnit.MILLISECONDS);
+
+            //UsernamePasswordToken userToken = new UsernamePasswordToken(username, password);
+            //Subject subject = SecurityUtils.getSubject();
+            //subject.login(userToken);
+
             return jwt;
         }catch (Exception e) {
             throw new BussinessException(403, ResultConst.USER_ISDELETE);
@@ -91,7 +100,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user1.setUsername(user.getUsername());
         user1.setPassword(user.getPassword());
         user1.setRole("用户");
-        user1.setState("1");
+        user1.setState(1);
         user1.setIsdelete("0");
         userService.save(user1);
     }

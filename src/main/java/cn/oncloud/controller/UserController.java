@@ -52,7 +52,9 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity home(@RequestHeader("Authorization") String token){
+    @WebLog("首页用户信息接口")
+    public ResponseEntity home(@RequestHeader("token") String token){
+        System.out.println("开始请求用户信息");
         String strJson = stringRedisTemplate.opsForValue().get(token);
         User user = JSON.parseObject(strJson, User.class);
         user.setPassword("");
@@ -64,7 +66,7 @@ public class UserController {
     public ResponseEntity userList(@RequestParam(name = "query", required = false) String userName,
                                    @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                                    @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
-                                   @RequestHeader("Authorization") String token) {
+                                   @RequestHeader("token") String token) {
 
         IPage<User> page = userService.selectByUsername(new Page<>(pageNum, pageSize), userName);
         JSONObject resp = new JSONObject().fluentPut("total", page.getTotal());

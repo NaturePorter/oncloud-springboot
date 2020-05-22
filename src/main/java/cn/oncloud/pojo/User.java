@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -20,10 +22,32 @@ public class User implements Serializable {
     /**设置数据库id自增*/
     @TableId(type = IdType.AUTO)
     private Long id;
+    /**
+     * 用户名称
+     */
     private String username;
+    /**
+     * 用户密码
+     */
     private String password;
+    /**
+     * 联系电话
+     */
+    private String mobile;
+    /**
+     * 邮箱地址
+     */
+    private String email;
+    /**
+     * 用户角色
+     */
     private String role;
-    private String state;
+    /**
+     * 用户状态
+     * 正常：0
+     * 禁用：1
+     */
+    private Integer state;
     /**
      * 踩了个坑，数据库中的delete是个关键字，所以字段名不能使用delete
      */

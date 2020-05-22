@@ -1,3 +1,4 @@
+/*
 package cn.oncloud.filter;
 
 import cn.oncloud.dto.base.ResultBean;
@@ -13,14 +14,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+*/
 /**
  * @author 余弘洋
  * 功能描述：拦截器，拦截前端请求，验证其中的token令牌是否合法
- */
+ *//*
+
 public class AuthorizeFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        System.out.println("我出生了！");
     }
 
     @Override
@@ -41,12 +45,14 @@ public class AuthorizeFilter implements Filter {
         //3.判断当前的请求是否为登录请求,如果是,则直接放行
         if (request.getRequestURI().contains("/login")){
             chain.doFilter(request, response);
-        /**判断当前请求是否为下载，如果是，就放行，有安全隐患，后期改正*/
+        */
+/**判断当前请求是否为下载，如果是，就放行，有安全隐患，后期改正*//*
+
         } else if(request.getRequestURI().contains("/download")){
             chain.doFilter(request, response);
         } else {
             //4.获取当前的所有请求头信息
-            String jwtToken = request.getHeader("Authorization");
+            String jwtToken = request.getHeader("token");
             //6.判断当前令牌是否存在, 如果不存在,则向客户端返回错误提示信息
             if (StringUtils.isEmpty(jwtToken)) {
                 ResultBean error = ResultBean.error(HttpStatus.FORBIDDEN.value(), ResultConst.INVALID_TOKEN);
@@ -73,5 +79,7 @@ public class AuthorizeFilter implements Filter {
 
     @Override
     public void destroy() {
+        System.out.println("我死了！");
     }
 }
+*/

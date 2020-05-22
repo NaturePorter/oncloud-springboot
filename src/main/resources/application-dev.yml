@@ -1,8 +1,6 @@
 server:
   port: 8797
   #关闭缓存
-thymeleaf:
-  cache: false
 
 spring:
   datasource:
