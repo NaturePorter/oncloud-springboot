@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.oncloud.mapper.UserMapper">
+
+    <!-- 查询用户的所有权限 -->
+    <select id="queryAllPerms" resultType="String">
+        select perms from oc_user_role our
+            left join oc_role_menu orm on our.role_id = orm.role_id
+            left join oc_menu om on om.menu_id = orm.menu_id
+        where our.user_id = #{userId}
+    </select>
+
+</mapper>

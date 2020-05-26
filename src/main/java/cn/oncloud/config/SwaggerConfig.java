@@ -22,8 +22,6 @@ import java.util.ArrayList;
 @EnableSwagger2
 public class SwaggerConfig {
 
-
-
     /**
      * 配置swagger的docket的bean实例
      * enable:是否启用swagger，false为不启用

@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @EnableTransactionManagement
 @Configuration
-@MapperScan("cn.oncloud.mapper.*.mapper*")
+@MapperScan("cn.oncloud.mapper.*.mapper*") // 扫描
 public class MybatisPlusConfig {
 
     @Bean

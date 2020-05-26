@@ -1,6 +1,6 @@
 package cn.oncloud.mapper;
 
-import cn.oncloud.pojo.Role;
+import cn.oncloud.pojo.RoleMenu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -8,5 +8,5 @@ import org.apache.ibatis.annotations.Mapper;
  * @author YYY
  */
 @Mapper
-public interface RoleMapper extends BaseMapper<Role> {
+public interface RoleMenuMapper extends BaseMapper<RoleMenu> {
 }

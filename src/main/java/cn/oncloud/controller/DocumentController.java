@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +57,7 @@ public class DocumentController {
     @PostMapping("/docupload")
     @WebLog("上传文档接口")
     public ResponseEntity docUpload(@RequestParam("file") MultipartFile file, String docname, String doclabel, String docdescribe,
-                                    @RequestHeader("Authorization") String token) {
+                                    @RequestHeader("token") String token) {
         String strJson = stringRedisTemplate.opsForValue().get(token);
         User user = JSON.parseObject(strJson, User.class);
         //创建时间
@@ -123,7 +124,7 @@ public class DocumentController {
     public ResponseEntity docList(@RequestParam(name = "query", required = false) String docName,
                                   @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                                   @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
-                                  @RequestHeader("Authorization") String token) {
+                                  @RequestHeader("token") String token) {
         String strJson = stringRedisTemplate.opsForValue().get(token);
         User user = JSON.parseObject(strJson, User.class);
         IPage<Document> page = documentService.selectByDocname(new Page<>(pageNum, pageSize), docName, user.getId());
@@ -180,6 +181,7 @@ public class DocumentController {
 
     @GetMapping("/auditdoclist")
     @WebLog("审核文档列表接口")
+    @RequiresPermissions("oc:doc:audit")
     public ResponseEntity auditlist(@RequestParam(name = "query", required = false) String docName,
                                       @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                                       @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize) {

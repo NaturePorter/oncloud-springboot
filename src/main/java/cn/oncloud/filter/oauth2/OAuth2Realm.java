@@ -3,14 +3,18 @@
 package cn.oncloud.filter.oauth2;
 
 import cn.oncloud.pojo.User;
+import cn.oncloud.service.ShiroService;
 import com.alibaba.fastjson.JSON;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
+
+import java.util.Set;
 
 
 /**
@@ -23,6 +27,9 @@ public class OAuth2Realm extends AuthorizingRealm {
 
     @Autowired
     StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    ShiroService shiroService;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -38,7 +45,12 @@ public class OAuth2Realm extends AuthorizingRealm {
         System.out.println("执行了=》授权doGetAuthorizationInfo（）");
         User user = (User)principals.getPrimaryPrincipal();
         System.out.println(user);
-        return null;
+        //用户权限列表
+        Set<String> permsSet = shiroService.getUserPermissions(user.getId());
+
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        info.setStringPermissions(permsSet);
+        return info;
     }
 
     /**

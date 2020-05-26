@@ -85,7 +85,9 @@ public class OAuth2Filter extends AuthenticatingFilter {
     }
 
     /**
-     * 获取请求的token
+     * 功能描述：获取请求的token
+     * @param httpRequest 请求
+     * @return token令牌
      */
     private String getRequestToken(HttpServletRequest httpRequest){
         /**

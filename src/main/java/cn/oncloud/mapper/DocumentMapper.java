@@ -4,6 +4,7 @@ import cn.oncloud.pojo.Document;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -12,6 +13,7 @@ import org.apache.ibatis.annotations.Update;
  * @author 余弘洋
  * 功能描述：文档mapper接口类
  */
+@Mapper
 public interface DocumentMapper extends BaseMapper<Document> {
     @Select({"<script>",
             "select d.id, d.docname, d.docsize, d.doclabel, d.docdescribe, d.downloadfrequency, d.uploadtime, d.isshared, d.isaudit",

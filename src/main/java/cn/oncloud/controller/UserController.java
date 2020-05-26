@@ -67,7 +67,6 @@ public class UserController {
                                    @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                                    @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
                                    @RequestHeader("token") String token) {
-
         IPage<User> page = userService.selectByUsername(new Page<>(pageNum, pageSize), userName);
         JSONObject resp = new JSONObject().fluentPut("total", page.getTotal());
         resp.put("users", page.getRecords());
