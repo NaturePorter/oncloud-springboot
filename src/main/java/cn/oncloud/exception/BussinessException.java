@@ -3,6 +3,9 @@ package cn.oncloud.exception;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author YYY
+ */
 @Data
 @NoArgsConstructor
 public class BussinessException extends RuntimeException{

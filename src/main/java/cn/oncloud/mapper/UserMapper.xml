@@ -11,4 +11,11 @@
         where our.user_id = #{userId}
     </select>
 
+    <!-- 查询用户的所有菜单ID -->
+    <select id="queryAllMenuId" resultType="long">
+		select distinct orm.menu_id from oc_user_role our
+            left join oc_role_menu orm on our.role_id = orm.role_id
+        where our.user_id = 1
+	</select>
+
 </mapper>

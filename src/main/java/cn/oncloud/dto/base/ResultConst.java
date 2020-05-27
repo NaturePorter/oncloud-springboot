@@ -32,4 +32,6 @@ public class ResultConst {
     public static final String DEL_DOCUMENT_SUCC = "删除文档成功";
     public static final String UPD_DOCUMENTS_AUDIT_SUCC = "审核文档成功";
 
+    public static final String GET_MENU_SUCC = "获取菜单成功";
+
 }

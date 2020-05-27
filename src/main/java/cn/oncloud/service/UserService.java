@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * @author 余弘洋
  * 描述：Service接口类
@@ -41,4 +43,6 @@ public interface UserService extends IService<User> {
      * @return 返回是否成功
      */
     void addUser(User user);
+
+    List<Long> queryAllMenuId(Long userId);
 }

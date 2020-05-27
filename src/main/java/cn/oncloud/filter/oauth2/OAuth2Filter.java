@@ -1,5 +1,3 @@
-
-
 package cn.oncloud.filter.oauth2;
 
 import cn.oncloud.dto.base.ResultBean;

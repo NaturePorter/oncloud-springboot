@@ -4,6 +4,7 @@ import cn.oncloud.dto.base.ResultConst;
 import cn.oncloud.exception.BussinessException;
 import cn.oncloud.mapper.UserMapper;
 import cn.oncloud.pojo.User;
+import cn.oncloud.util.Constant;
 import cn.oncloud.util.JwtUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -19,6 +20,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -38,7 +40,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     StringRedisTemplate stringRedisTemplate;
 
-    private static String ISDELETE = "1";
     /**
      * 登录方法
      *
@@ -54,15 +55,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             LambdaQueryWrapper<User> queryWrapper = Wrappers.<User>lambdaQuery().eq(User::getUsername, username).eq(User::getPassword, password);
             user = userService.getOne(queryWrapper);
             if (user == null) {
-                throw new BussinessException(403, ResultConst.INVALID_PASSWORD);
+                throw new BussinessException(401, ResultConst.INVALID_PASSWORD);
             }
         } catch (Exception e) {
-            throw new BussinessException(403, ResultConst.INVALID_PASSWORD);
+            throw new BussinessException(401, ResultConst.INVALID_PASSWORD);
         }
 
         try {
-            if (ISDELETE.equals(user.getIsdelete())) {
-                throw new BussinessException(403, ResultConst.USER_ISDELETE);
+            if (Constant.ISDELETE.equals(user.getIsdelete())) {
+                throw new BussinessException(401, ResultConst.USER_ISDELETE);
             }
             //生成jwt令牌
             String jwt = JwtUtil.createJWT(UUID.randomUUID().toString(), username, null);
@@ -76,7 +77,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
             return jwt;
         }catch (Exception e) {
-            throw new BussinessException(403, ResultConst.USER_ISDELETE);
+            throw new BussinessException(401, ResultConst.USER_ISDELETE);
         }
     }
 
@@ -103,6 +104,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user1.setState(1);
         user1.setIsdelete("0");
         userService.save(user1);
+    }
+
+    @Override
+    public List<Long> queryAllMenuId(Long userId) {
+        return baseMapper.queryAllMenuId(userId);
     }
 
 }

@@ -76,30 +76,30 @@ public class LogAspect {
      *
      * @throws Throwable
      */
-    @After("webLog()")
+    /*@After("webLog()")
     public void after() throws Throwable {
         logger.info("============ after ==========");
-    }
+    }*/
 
     /**
      * 切点返回内容后
      *
      * @throws Throwable
      */
-    @AfterReturning("webLog()")
+    /*@AfterReturning("webLog()")
     public void afterReturning() throws Throwable {
         logger.info("============ afterReturning ==========");
-    }
+    }*/
 
     /**
      * 切点抛出异常后
      *
      * @throws Throwable
      */
-    @AfterThrowing("webLog()")
+    /*@AfterThrowing("webLog()")
     public void afterThrowing() throws Throwable {
         logger.info("============ afterThrowing ==========");
-    }
+    }*/
 
     /**
      * 环绕

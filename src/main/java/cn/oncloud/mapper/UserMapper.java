@@ -36,4 +36,6 @@ public interface UserMapper extends BaseMapper<User> {
      * @param userId  用户ID
      */
     List<String> queryAllPerms(Long userId);
+
+    List<Long> queryAllMenuId(Long userId);
 }

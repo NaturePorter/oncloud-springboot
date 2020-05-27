@@ -1,5 +1,3 @@
-
-
 package cn.oncloud.filter.oauth2;
 
 import cn.oncloud.pojo.User;
@@ -60,6 +58,7 @@ public class OAuth2Realm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         System.out.println("执行了=》认证doGetAuthenticationInfo（）");
+
         String accessToken = (String) token.getPrincipal();
 
         //根据accessToken，查询用户信息
