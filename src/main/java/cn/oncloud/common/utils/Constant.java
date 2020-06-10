@@ -1,4 +1,4 @@
-package cn.oncloud.util;
+package cn.oncloud.common.utils;
 
 public class Constant {
     /**

@@ -1,6 +1,6 @@
 
 
-package cn.oncloud.config;
+package cn.oncloud.common.config;
 
 import cn.oncloud.filter.XssFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

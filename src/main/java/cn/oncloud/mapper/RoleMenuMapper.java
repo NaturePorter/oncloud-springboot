@@ -1,6 +1,6 @@
 package cn.oncloud.mapper;
 
-import cn.oncloud.pojo.RoleMenu;
+import cn.oncloud.entity.RoleMenu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

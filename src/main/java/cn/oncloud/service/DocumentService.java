@@ -1,6 +1,6 @@
 package cn.oncloud.service;
 
-import cn.oncloud.pojo.Document;
+import cn.oncloud.entity.Document;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;

@@ -1,4 +1,4 @@
-package cn.oncloud.util;
+package cn.oncloud.common.utils;
 
 import cn.oncloud.exception.Campuso2oException;
 import org.apache.commons.lang3.StringUtils;

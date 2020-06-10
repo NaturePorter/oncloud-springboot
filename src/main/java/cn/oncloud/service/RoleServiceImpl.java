@@ -1,7 +1,7 @@
 package cn.oncloud.service;
 
 import cn.oncloud.mapper.RoleMapper;
-import cn.oncloud.pojo.Role;
+import cn.oncloud.entity.Role;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

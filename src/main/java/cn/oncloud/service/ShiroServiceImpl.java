@@ -2,7 +2,7 @@ package cn.oncloud.service;
 
 import cn.oncloud.mapper.MenuMapper;
 import cn.oncloud.mapper.UserMapper;
-import cn.oncloud.pojo.Menu;
+import cn.oncloud.entity.Menu;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

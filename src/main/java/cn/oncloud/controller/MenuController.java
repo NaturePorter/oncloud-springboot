@@ -3,7 +3,7 @@ package cn.oncloud.controller;
 import cn.oncloud.aspect.WebLog;
 import cn.oncloud.dto.base.ResultBean;
 import cn.oncloud.dto.base.ResultConst;
-import cn.oncloud.pojo.Menu;
+import cn.oncloud.entity.Menu;
 import cn.oncloud.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

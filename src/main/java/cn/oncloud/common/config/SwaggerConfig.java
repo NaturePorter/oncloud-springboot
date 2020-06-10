@@ -1,4 +1,4 @@
-package cn.oncloud.config;
+package cn.oncloud.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +35,7 @@ public class SwaggerConfig {
         Profiles profiles = Profiles.of("dev");
         //通过environment.acceptsProfiles判断是否处在dev环境
         boolean falg = environment.acceptsProfiles(profiles);
-
+        System.out.println(falg);
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .groupName("余弘洋")
@@ -66,7 +66,7 @@ public class SwaggerConfig {
                 //版本
                 "1.0",
                 //组织的url
-                "urn:tos",
+                "yyyyy",
                 //作者信息
                 CONTACT,
                 //Apache版本

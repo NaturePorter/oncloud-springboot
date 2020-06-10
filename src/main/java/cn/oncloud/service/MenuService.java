@@ -1,6 +1,6 @@
 package cn.oncloud.service;
 
-import cn.oncloud.pojo.Menu;
+import cn.oncloud.entity.Menu;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

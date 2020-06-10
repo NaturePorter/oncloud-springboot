@@ -1,7 +1,7 @@
 package cn.oncloud.filter.oauth2;
 
 import cn.oncloud.dto.base.ResultBean;
-import cn.oncloud.util.HttpContextUtils;
+import cn.oncloud.common.utils.HttpContextUtils;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -10,7 +10,6 @@ import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMethod;
-import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;

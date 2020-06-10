@@ -1,4 +1,4 @@
-package cn.oncloud.pojo;
+package cn.oncloud.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;

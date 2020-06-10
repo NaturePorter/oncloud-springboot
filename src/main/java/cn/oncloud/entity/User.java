@@ -1,12 +1,10 @@
-package cn.oncloud.pojo;
+package cn.oncloud.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**

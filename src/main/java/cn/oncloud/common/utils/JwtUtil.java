@@ -1,4 +1,4 @@
-package cn.oncloud.util;
+package cn.oncloud.common.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
@@ -53,7 +53,7 @@ public class JwtUtil {
         byte[] encodedKey = Base64.getDecoder().decode(JwtUtil.JWT_KEY);
         return new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
     }
-    
+
     /**
      * 解析
      */

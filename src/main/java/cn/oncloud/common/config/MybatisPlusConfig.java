@@ -1,4 +1,4 @@
-package cn.oncloud.config;
+package cn.oncloud.common.config;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;

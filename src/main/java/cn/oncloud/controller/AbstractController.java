@@ -1,7 +1,7 @@
 package cn.oncloud.controller;
 
 
-import cn.oncloud.pojo.User;
+import cn.oncloud.entity.User;
 import org.apache.shiro.SecurityUtils;
 
 /**

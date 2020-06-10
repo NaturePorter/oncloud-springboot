@@ -1,6 +1,6 @@
 package cn.oncloud.filter.oauth2;
 
-import cn.oncloud.pojo.User;
+import cn.oncloud.entity.User;
 import cn.oncloud.service.ShiroService;
 import com.alibaba.fastjson.JSON;
 import org.apache.shiro.authc.*;

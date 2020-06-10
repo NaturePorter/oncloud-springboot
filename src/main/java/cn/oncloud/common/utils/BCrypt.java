@@ -1,4 +1,4 @@
-package cn.oncloud.util;
+package cn.oncloud.common.utils;
 // Source code recreated from a .class file by IntelliJ IDEA
 // (powered by Fernflower decompiler)
 //

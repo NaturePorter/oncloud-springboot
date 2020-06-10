@@ -3,32 +3,19 @@ package cn.oncloud.controller;
 import cn.oncloud.aspect.WebLog;
 import cn.oncloud.dto.base.ResultBean;
 import cn.oncloud.dto.base.ResultConst;
-import cn.oncloud.pojo.User;
+import cn.oncloud.entity.User;
 import cn.oncloud.service.UserService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @author 余弘洋

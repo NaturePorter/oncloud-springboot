@@ -1,8 +1,8 @@
 package cn.oncloud.service;
 
 import cn.oncloud.mapper.MenuMapper;
-import cn.oncloud.pojo.Menu;
-import cn.oncloud.util.Constant;
+import cn.oncloud.entity.Menu;
+import cn.oncloud.common.utils.Constant;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

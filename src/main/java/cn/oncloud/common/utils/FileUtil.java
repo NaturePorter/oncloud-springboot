@@ -1,4 +1,4 @@
-package cn.oncloud.util;
+package cn.oncloud.common.utils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;

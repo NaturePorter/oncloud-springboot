@@ -1,6 +1,6 @@
 package cn.oncloud.service;
 
-import cn.oncloud.pojo.Role;
+import cn.oncloud.entity.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

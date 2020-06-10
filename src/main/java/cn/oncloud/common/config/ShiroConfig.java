@@ -6,7 +6,7 @@
  * 版权所有，侵权必究！
  */
 
-package cn.oncloud.config;
+package cn.oncloud.common.config;
 
 import cn.oncloud.filter.oauth2.OAuth2Filter;
 import cn.oncloud.filter.oauth2.OAuth2Realm;
@@ -50,7 +50,9 @@ public class ShiroConfig {
         shiroFilter.setFilters(filters);
 
         Map<String, String> filterMap = new LinkedHashMap<>();
-
+        /** 给swagger放行 */
+        filterMap.put("/swagger/**", "anon");
+        filterMap.put("/swagger-ui.html", "anon");
         filterMap.put("/api/login", "anon");
         filterMap.put("/**", "oauth2");
 
