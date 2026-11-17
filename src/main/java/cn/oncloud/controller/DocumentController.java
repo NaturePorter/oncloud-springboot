@@ -10,7 +10,7 @@ import cn.oncloud.entity.User;
 import cn.oncloud.exception.BussinessException;
 import cn.oncloud.service.DocumentService;
 import cn.oncloud.service.TokenService;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang3.StringUtils;

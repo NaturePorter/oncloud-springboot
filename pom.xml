@@ -18,9 +18,9 @@
         <java.version>17</java.version>
         <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
         <druid.version>1.2.20</druid.version>
-        <shiro.version>1.13.0</shiro.version>
+        <shiro.version>2.1.0</shiro.version>
         <jjwt.version>0.11.5</jjwt.version>
-        <fastjson.version>1.2.83</fastjson.version>
+        <fastjson2.version>2.0.66</fastjson2.version>
         <springdoc.version>1.6.15</springdoc.version>
     </properties>
 
@@ -95,11 +95,11 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- JSON -->
+        <!-- JSON：fastjson 1.x 存在反序列化 RCE 且不再修复，改用 fastjson2 -->
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>${fastjson.version}</version>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>${fastjson2.version}</version>
         </dependency>
 
         <!-- 接口文档 -->
@@ -113,11 +113,6 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.11.0</version>
         </dependency>
 
         <dependency>

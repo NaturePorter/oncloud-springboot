@@ -9,10 +9,11 @@
 | --- | --- |
 | Spring Boot | 2.7.18 |
 | JDK | 17 |
-| Shiro | 1.13.0 |
+| Shiro | 2.1.0 |
 | MyBatis-Plus | 3.5.3.2 |
 | Druid | 1.2.20 |
 | Redis | Spring Data Redis |
+| JSON | fastjson2 2.0.66 |
 | 接口文档 | springdoc-openapi 1.6.15 |
 
 ## 快速开始
@@ -90,7 +91,9 @@ java -jar target/oncloud-boot-1.0.0.jar
 ### 构建与依赖
 
 - Spring Boot 2.2.6 升级到 2.7.18，解决 JDK 17 下 `sun.misc.BASE64Encoder` 无法编译的问题。
-- Shiro 1.7.1 → 1.13.0（修复已知权限绕过 CVE-2023-22602 等问题）。
+- Shiro 1.7.1 → 1.13.0 → 2.1.0（修复 CVE-2023-22602、CVE-2026-23903，并开启 `caseInsensitive` 匹配）。
+- fastjson 1.2.83 → fastjson2 2.0.66（1.x 存在反序列化 RCE 且官方不再修复）。
+- 移除未使用的 `commons-io`（CVE-2024-47554）。
 - MyBatis-Plus 3.3.1 → 3.5.3.2，旧版 `PaginationInterceptor` 换成 `MybatisPlusInterceptor`。
 - jjwt 0.9.0 → 0.11.5，移除弱密钥与已废弃 API。
 - 移除与 Spring Boot 2.2 绑定的 springfox 2.9.2，改用 springdoc-openapi。

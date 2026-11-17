@@ -8,7 +8,7 @@ import cn.oncloud.entity.User;
 import cn.oncloud.exception.BussinessException;
 import cn.oncloud.service.TokenService;
 import cn.oncloud.service.UserService;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;

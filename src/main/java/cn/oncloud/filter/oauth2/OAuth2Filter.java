@@ -2,7 +2,7 @@ package cn.oncloud.filter.oauth2;
 
 import cn.oncloud.common.utils.HttpContextUtils;
 import cn.oncloud.dto.base.ResultBean;
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;

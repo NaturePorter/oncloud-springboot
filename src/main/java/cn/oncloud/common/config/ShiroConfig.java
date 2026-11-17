@@ -35,6 +35,8 @@ public class ShiroConfig {
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(securityManager);
+        // 开启大小写不敏感匹配，修复 CVE-2026-23903（Windows/macOS 大小写不敏感文件系统上的鉴权绕过）
+        shiroFilter.setCaseInsensitive(true);
 
         Map<String, Filter> filters = new LinkedHashMap<>();
         filters.put("oauth2", new OAuth2Filter());
