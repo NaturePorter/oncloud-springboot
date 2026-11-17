@@ -9,40 +9,37 @@ import java.util.List;
 
 /**
  * @author 余弘洋
- * 描述：Service接口类
+ * 描述：用户Service接口类
  */
 public interface UserService extends IService<User> {
 
     /**
-     * 登录方法
-     * @param username
-     * @param password
-     * @return 返回登录生成的token令牌
+     * 登录，返回 token
      */
     String login(String username, String password);
 
     /**
-     * 查询用户列表
-     * @param page 分页对象
-     * @param userName 用户名
-     * @return 返回已分页的列表
+     * 分页查询用户
      */
     IPage<User> selectByUsername(Page<User> page, String userName);
 
     /**
-     * 根据id修改用户state
-     * @param id 用户id
-     * @param state 用户状态
-     * @return 返回成功与否
+     * 启用/停用用户
      */
-    Integer updateUserStateById(Integer id, Integer state);
+    Integer updateUserStateById(Long id, Integer state);
 
     /**
-     * 添加用户
-     * @param user 用户对象
-     * @return 返回是否成功
+     * 新增用户
      */
     void addUser(User user);
 
+    /**
+     * 修改用户角色
+     */
+    void updateUserRole(Long id, String role);
+
+    /**
+     * 查询用户拥有的菜单ID
+     */
     List<Long> queryAllMenuId(Long userId);
 }

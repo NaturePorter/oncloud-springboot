@@ -43,8 +43,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public List<Menu> getUserMenuList(Long userId) {
+        if (userId == null) {
+            return new ArrayList<>();
+        }
         //系统管理员，拥有最高权限
-        if(userId == Constant.SUPER_ADMIN){
+        if (Constant.SUPER_ADMIN == userId) {
             return getAllMenuList(null);
         }
 
@@ -69,11 +72,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      * 递归
      */
     private List<Menu> getMenuTreeList(List<Menu> menuList, List<Long> menuIdList){
-        List<Menu> subMenuList = new ArrayList<Menu>();
+        List<Menu> subMenuList = new ArrayList<>();
 
         for(Menu entity : menuList){
             //目录
-            if(entity.getType() == Constant.MenuType.CATALOG.getValue()){
+            if(entity.getType() != null && entity.getType() == Constant.MenuType.CATALOG.getValue()){
                 entity.setList(getMenuTreeList(queryListParentId(entity.getMenuId(), menuIdList), menuIdList));
             }
             subMenuList.add(entity);

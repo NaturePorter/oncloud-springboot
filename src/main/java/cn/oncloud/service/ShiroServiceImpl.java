@@ -1,5 +1,6 @@
 package cn.oncloud.service;
 
+import cn.oncloud.common.utils.Constant;
 import cn.oncloud.mapper.MenuMapper;
 import cn.oncloud.mapper.UserMapper;
 import cn.oncloud.entity.Menu;
@@ -23,14 +24,12 @@ public class ShiroServiceImpl implements ShiroService {
     @Autowired
     UserMapper userMapper;
 
-    public static final int SUPER_ADMIN = 1;
-
     @Override
     public Set<String> getUserPermissions(long userId) {
         // 用于存放权限字段
         List<String> permsList;
         // 系统管理员，拥有最高权限
-        if (userId == SUPER_ADMIN) {
+        if (userId == Constant.SUPER_ADMIN) {
             List<Menu> menuList = menuMapper.selectList(null);
             permsList = new ArrayList<>(menuList.size());
             for (Menu menu : menuList) {
@@ -41,6 +40,9 @@ public class ShiroServiceImpl implements ShiroService {
         }
         //用户权限列表，把权限字段存入到set集合中
         Set<String> permsSet = new HashSet<>();
+        if (permsList == null) {
+            return permsSet;
+        }
         for(String perms : permsList){
             if(StringUtils.isBlank(perms)){
                 continue;

@@ -15,36 +15,54 @@ import org.apache.ibatis.annotations.Update;
  */
 @Mapper
 public interface DocumentMapper extends BaseMapper<Document> {
+
+    /**
+     * 我的文档
+     */
     @Select({"<script>",
-            "select d.id, d.docname, d.docsize, d.doclabel, d.docdescribe, d.downloadfrequency, d.uploadtime, d.isshared, d.isaudit",
-            "from oc_document d where d.isdelete = 0 and d.uid = ${uid}",
-            "<if test='docName != null'>",
-            "and d.docname like concat ('%','${docName}','%') ",
+            "select d.id, d.docname, d.docsize, d.doclabel, d.docdescribe, d.downloadfrequency, d.uploadtime, d.isshared, d.isaudit, d.uid",
+            "from oc_document d where d.isdelete = 0 and d.uid = #{uid}",
+            "<if test='docName != null and docName != \"\"'>",
+            "and d.docname like concat('%', #{docName}, '%')",
             "</if>",
+            "order by d.uploadtime desc, d.id desc",
             "</script>"})
-    IPage<Document> selectByDocname(Page<Document> page, @Param(value = "docName") String docName, Long uid);
+    IPage<Document> selectByDocname(Page<Document> page,
+                                    @Param("docName") String docName,
+                                    @Param("uid") Long uid);
 
-    @Update("UPDATE oc_document SET isshared = ${shared} WHERE id = ${id}")
-    Integer updateDocSharedById(Integer id, Integer shared);
+    @Update("update oc_document set isshared = #{shared} where id = #{id} and isdelete = '0'")
+    Integer updateDocSharedById(@Param("id") Long id, @Param("shared") Integer shared);
 
+    /**
+     * 文档大厅：只展示已共享且已审核通过的文档
+     */
     @Select({"<script>",
-            "select d.id, d.docname, d.docsize, d.doclabel, d.docdescribe, d.downloadfrequency, d.uploadtime, d.uid ",
-            "from oc_document d where d.isdelete = 0 and d.isshared = 1 and d.isaudit = 1",
-            "<if test='docName != null'>",
-            "and d.docname like concat ('%','${docName}','%') ",
+            "select d.id, d.docname, d.docsize, d.doclabel, d.docdescribe, d.downloadfrequency, d.uploadtime, d.uid",
+            "from oc_document d where d.isdelete = 0 and d.isshared = '1' and d.isaudit = '1'",
+            "<if test='docName != null and docName != \"\"'>",
+            "and d.docname like concat('%', #{docName}, '%')",
             "</if>",
+            "order by d.uploadtime desc, d.id desc",
             "</script>"})
-    IPage<Document> hallselectByDocname(Page<Document> page, String docName);
+    IPage<Document> hallselectByDocname(Page<Document> page, @Param("docName") String docName);
 
+    /**
+     * 待审核文档
+     */
     @Select({"<script>",
-            "select d.id, d.docname, d.docsize, d.doclabel, d.docdescribe, d.downloadfrequency, d.uploadtime, d.uid, d.isaudit ",
-            "from oc_document d where d.isdelete = 0 and d.isaudit = 0",
-            "<if test='docName != null'>",
-            "and d.docname like concat ('%','${docName}','%') ",
+            "select d.id, d.docname, d.docsize, d.doclabel, d.docdescribe, d.downloadfrequency, d.uploadtime, d.uid, d.isaudit",
+            "from oc_document d where d.isdelete = 0 and d.isaudit = '0'",
+            "<if test='docName != null and docName != \"\"'>",
+            "and d.docname like concat('%', #{docName}, '%')",
             "</if>",
+            "order by d.uploadtime desc, d.id desc",
             "</script>"})
-    IPage<Document> auditselectByDocname(Page<Document> page, String docName);
+    IPage<Document> auditselectByDocname(Page<Document> page, @Param("docName") String docName);
 
-    @Update("UPDATE oc_document SET isaudit = ${audit} WHERE id = ${id}")
-    Integer updateUserStateById(Integer id, Integer audit);
+    @Update("update oc_document set isaudit = #{audit} where id = #{id} and isdelete = '0'")
+    Integer updateDocAuditById(@Param("id") Long id, @Param("audit") Integer audit);
+
+    @Update("update oc_document set downloadfrequency = downloadfrequency + 1 where id = #{id}")
+    Integer increaseDownloadFrequency(@Param("id") Long id);
 }

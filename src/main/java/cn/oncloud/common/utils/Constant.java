@@ -1,10 +1,18 @@
 package cn.oncloud.common.utils;
 
 public class Constant {
+
     /**
-     * 超级管理员
+     * 超级管理员用户ID
      */
-    public static final int SUPER_ADMIN = 1;
+    public static final long SUPER_ADMIN = 1L;
+
+    /**
+     * 角色名称
+     */
+    public static final String ROLE_SUPER_ADMIN = "超级管理员";
+    public static final String ROLE_ADMIN = "管理员";
+    public static final String ROLE_USER = "用户";
 
     /**
      * 用户是否停用标志符
@@ -28,7 +36,7 @@ public class Constant {
          */
         BUTTON(2);
 
-        private int value;
+        private final int value;
 
         MenuType(int value) {
             this.value = value;

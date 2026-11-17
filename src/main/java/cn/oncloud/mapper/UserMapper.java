@@ -20,22 +20,24 @@ public interface UserMapper extends BaseMapper<User> {
 
     @Select({"<script>",
             "select u.id, u.username, u.role, u.state",
-            "from oc_user u where u.isdelete = 0",
-            "<if test='userName != null'>",
-            "and u.username like concat ('%','${userName}','%') ",
+            "from oc_user u where u.isdelete = '0'",
+            "<if test='userName != null and userName != \"\"'>",
+            "and u.username like concat('%', #{userName}, '%')",
             "</if>",
+            "order by u.id asc",
             "</script>"})
-    IPage<User> selectByUsername(Page<User> page, @Param(value = "userName") String userName);
+    IPage<User> selectByUsername(Page<User> page, @Param("userName") String userName);
 
-
-    @Update("UPDATE oc_user SET state = ${state} WHERE id = ${id}")
-    Integer updateUserStateById(Integer id, Integer state);
+    @Update("update oc_user set state = #{state} where id = #{id} and isdelete = '0'")
+    Integer updateUserStateById(@Param("id") Long id, @Param("state") Integer state);
 
     /**
      * 查询用户的所有权限
-     * @param userId  用户ID
      */
-    List<String> queryAllPerms(Long userId);
+    List<String> queryAllPerms(@Param("userId") Long userId);
 
-    List<Long> queryAllMenuId(Long userId);
+    /**
+     * 查询用户的所有菜单ID
+     */
+    List<Long> queryAllMenuId(@Param("userId") Long userId);
 }

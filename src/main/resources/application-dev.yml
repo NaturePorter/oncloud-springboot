@@ -1,45 +1,36 @@
 server:
-  port: 8797
-  #关闭缓存
+  port: ${SERVER_PORT:8797}
 
 spring:
   datasource:
     druid:
-      url: jdbc:mysql://39.98.127.112:3306/dataoncloud?useSSL=false&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
-      username: root
-      password: yuhongyang
+      url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:dataoncloud}?useSSL=false&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      username: ${MYSQL_USERNAME:root}
+      password: ${MYSQL_PASSWORD:root}
       driver-class-name: com.mysql.cj.jdbc.Driver
-      # 连接池配置
       initial-size: 1
       max-active: 20
       min-idle: 1
       max-wait: 10000
       pool-prepared-statements: true
       max-open-prepared-statements: 20
-      validation-query: SELECT 1 FROM DUAL
-      validation-query-timeout: 5000
+      validation-query: SELECT 1
+      validation-query-timeout: 5
       test-on-borrow: false
       test-on-return: false
       test-while-idle: true
       time-between-eviction-runs-millis: 60000
       min-evictable-idle-time-millis: 30000
       max-evictable-idle-time-millis: 60000
-      removeAbandoned: true
-      removeAbandonedTimeout: 1800
-      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-      max-pool-prepared-statement-per-connection-size: 20
-      filters: stat,wall #filters: #配置多个英文逗号分隔(统计，sql注入，log4j过滤)
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      filters: stat
     type: com.alibaba.druid.pool.DruidDataSource
-  jackson:
-    default-property-inclusion: non_null
-
-#配置redis
   redis:
-    host: 39.98.127.112
-    port: 6379
-    timeout: 50000
-    password: 879704116
-    database: 0
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+    database: ${REDIS_DATABASE:0}
+    timeout: 5000
     lettuce:
       pool:
         max-active: 8

@@ -1,112 +1,145 @@
 package cn.oncloud.service;
 
-import cn.oncloud.dto.base.ResultConst;
-import cn.oncloud.exception.BussinessException;
-import cn.oncloud.mapper.UserMapper;
-import cn.oncloud.entity.User;
+import cn.oncloud.common.utils.BCrypt;
 import cn.oncloud.common.utils.Constant;
 import cn.oncloud.common.utils.JwtUtil;
-import com.alibaba.fastjson.JSON;
+import cn.oncloud.dto.base.ResultConst;
+import cn.oncloud.entity.User;
+import cn.oncloud.exception.BussinessException;
+import cn.oncloud.mapper.UserMapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author 余弘洋
- * 描述：Service实现类
+ * 描述：用户Service实现类
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    UserMapper userMapper;
-
-    @Autowired
-    StringRedisTemplate stringRedisTemplate;
-
     /**
-     * 登录方法
-     *
-     *
-     * @param username 用户姓名
-     * @param password 用户密码
-     * @return 返回根据用户姓名和密码生成的token令牌
+     * 允许分配的角色
      */
+    private static final Set<String> ROLES = Set.of(
+            Constant.ROLE_SUPER_ADMIN, Constant.ROLE_ADMIN, Constant.ROLE_USER);
+
+    private final TokenService tokenService;
+
+    public UserServiceImpl(TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
+
     @Override
     public String login(String username, String password) {
-        System.out.println("进入了登录方法");
-        User user = null;
-        try {
-            LambdaQueryWrapper<User> queryWrapper = Wrappers.<User>lambdaQuery().eq(User::getUsername, username).eq(User::getPassword, password);
-            user = userService.getOne(queryWrapper);
-            if (user == null) {
-                throw new BussinessException(401, ResultConst.INVALID_PASSWORD);
-            }
-        } catch (Exception e) {
-            throw new BussinessException(401, ResultConst.INVALID_PASSWORD);
+        if (StringUtils.isAnyBlank(username, password)) {
+            throw new BussinessException(HttpStatus.BAD_REQUEST.value(), "用户名和密码不能为空");
         }
+        User user = getOne(Wrappers.<User>lambdaQuery()
+                .eq(User::getUsername, username.trim())
+                .eq(User::getIsdelete, "0"));
+        if (user == null || !matches(password, user.getPassword())) {
+            throw new BussinessException(HttpStatus.UNAUTHORIZED.value(), ResultConst.INVALID_PASSWORD);
+        }
+        if (user.getState() != null && user.getState() == 0) {
+            throw new BussinessException(HttpStatus.FORBIDDEN.value(), "账号已被停用，请联系管理员");
+        }
+        upgradePasswordIfNeeded(user, password);
 
-        try {
-            if (Constant.ISDELETE.equals(user.getIsdelete())) {
-                throw new BussinessException(401, ResultConst.USER_ISDELETE);
-            }
-            //生成jwt令牌
-            String jwt = JwtUtil.createJWT(UUID.randomUUID().toString(), username, null);
-            //将token和用户信息存储到redis中
-            String json = JSON.toJSONString(user);
-            stringRedisTemplate.opsForValue().set(jwt, json, JwtUtil.JWT_TTL, TimeUnit.MILLISECONDS);
+        String jwt = JwtUtil.createJWT(UUID.randomUUID().toString(), user.getUsername(), null);
+        tokenService.save(jwt, user, JwtUtil.JWT_TTL);
+        return jwt;
+    }
 
-            //UsernamePasswordToken userToken = new UsernamePasswordToken(username, password);
-            //Subject subject = SecurityUtils.getSubject();
-            //subject.login(userToken);
+    /**
+     * 校验密码：兼容历史明文密码，登录成功后自动升级为 BCrypt
+     */
+    private boolean matches(String rawPassword, String storedPassword) {
+        if (StringUtils.isBlank(storedPassword)) {
+            return false;
+        }
+        if (storedPassword.startsWith("$2")) {
+            return BCrypt.checkpw(rawPassword, storedPassword);
+        }
+        return storedPassword.equals(rawPassword);
+    }
 
-            return jwt;
-        }catch (Exception e) {
-            throw new BussinessException(401, ResultConst.USER_ISDELETE);
+    private void upgradePasswordIfNeeded(User user, String rawPassword) {
+        String stored = user.getPassword();
+        if (stored != null && !stored.startsWith("$2")) {
+            User update = new User();
+            update.setId(user.getId());
+            update.setPassword(BCrypt.hashpw(rawPassword, BCrypt.gensalt()));
+            updateById(update);
+            user.setPassword(update.getPassword());
         }
     }
 
     @Override
     public IPage<User> selectByUsername(Page<User> page, String userName) {
-        return userMapper.selectByUsername(page, userName);
+        return baseMapper.selectByUsername(page, StringUtils.trimToNull(userName));
     }
 
     @Override
-    public Integer updateUserStateById(Integer id, Integer state) {
-        return userMapper.updateUserStateById(id, state);
+    public Integer updateUserStateById(Long id, Integer state) {
+        if (state == null || (state != 0 && state != 1)) {
+            throw new BussinessException(HttpStatus.BAD_REQUEST.value(), "用户状态不合法");
+        }
+        return baseMapper.updateUserStateById(id, state);
     }
 
     @Override
     public void addUser(User user) {
-        User user1 = new User();
-        LambdaQueryWrapper<User> queryWrapper = Wrappers.<User>lambdaQuery().eq(User::getUsername, user.getUsername());
-        if (userService.getOne(queryWrapper) != null) {
+        if (user == null || StringUtils.isAnyBlank(user.getUsername(), user.getPassword())) {
+            throw new BussinessException(HttpStatus.BAD_REQUEST.value(), "用户名和密码不能为空");
+        }
+        String username = user.getUsername().trim();
+        if (username.length() < 3 || username.length() > 10) {
+            throw new BussinessException(HttpStatus.BAD_REQUEST.value(), "用户名长度需在3到10个字符之间");
+        }
+        if (user.getPassword().length() < 5 || user.getPassword().length() > 15) {
+            throw new BussinessException(HttpStatus.BAD_REQUEST.value(), "密码长度需在5到15个字符之间");
+        }
+        if (getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username)) != null) {
             throw new BussinessException(HttpStatus.BAD_REQUEST.value(), ResultConst.USER_NAME_EXIST);
         }
-        user1.setUsername(user.getUsername());
-        user1.setPassword(user.getPassword());
-        user1.setRole("用户");
-        user1.setState(1);
-        user1.setIsdelete("0");
-        userService.save(user1);
+        User target = new User();
+        target.setUsername(username);
+        target.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+        target.setRole(StringUtils.defaultIfBlank(user.getRole(), Constant.ROLE_USER));
+        target.setState(1);
+        target.setIsdelete("0");
+        target.setMobile(user.getMobile());
+        target.setEmail(user.getEmail());
+        save(target);
+    }
+
+    @Override
+    public void updateUserRole(Long id, String role) {
+        if (!ROLES.contains(role)) {
+            throw new BussinessException(HttpStatus.BAD_REQUEST.value(), "角色不存在");
+        }
+        User user = getById(id);
+        if (user == null) {
+            throw new BussinessException(HttpStatus.NOT_FOUND.value(), "用户不存在");
+        }
+        User update = new User();
+        update.setId(id);
+        update.setRole(role);
+        updateById(update);
     }
 
     @Override
     public List<Long> queryAllMenuId(Long userId) {
         return baseMapper.queryAllMenuId(userId);
     }
-
 }

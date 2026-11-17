@@ -5,17 +5,19 @@
 
     <!-- 查询用户的所有权限 -->
     <select id="queryAllPerms" resultType="String">
-        select perms from oc_user_role our
-            left join oc_role_menu orm on our.role_id = orm.role_id
-            left join oc_menu om on om.menu_id = orm.menu_id
+        select om.perms
+        from oc_user_role our
+        inner join oc_role_menu orm on our.role_id = orm.role_id
+        inner join oc_menu om on om.menu_id = orm.menu_id
         where our.user_id = #{userId}
     </select>
 
     <!-- 查询用户的所有菜单ID -->
     <select id="queryAllMenuId" resultType="long">
-		select distinct orm.menu_id from oc_user_role our
-            left join oc_role_menu orm on our.role_id = orm.role_id
-        where our.user_id = 1
-	</select>
+        select distinct orm.menu_id
+        from oc_user_role our
+        inner join oc_role_menu orm on our.role_id = orm.role_id
+        where our.user_id = #{userId}
+    </select>
 
 </mapper>

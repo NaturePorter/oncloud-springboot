@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration debug="true">
+<configuration>
 
     <!-- appender是configuration的子节点，是负责写日志的组件。 -->
     <!-- ConsoleAppender：把日志输出到控制台 -->

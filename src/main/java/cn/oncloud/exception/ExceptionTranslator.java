@@ -1,6 +1,8 @@
 package cn.oncloud.exception;
 
 import cn.oncloud.dto.base.ResultBean;
+import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.authz.UnauthenticatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.TypeMismatchException;
@@ -15,10 +17,9 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.nio.file.AccessDeniedException;
-
 @ControllerAdvice
 public class ExceptionTranslator {
+
     private static final Logger logger = LoggerFactory.getLogger(ExceptionTranslator.class);
 
     @ExceptionHandler(ConcurrencyFailureException.class)
@@ -30,48 +31,60 @@ public class ExceptionTranslator {
     @ExceptionHandler(TypeMismatchException.class)
     public ResponseEntity<ResultBean> processParameterizedValidationError(TypeMismatchException ex) {
         logger.error(ex.getMessage(), ex);
-        String valueType = ex.getValue().getClass().getSimpleName().toLowerCase();
-        String rvalueType = ex.getRequiredType().getSimpleName().toLowerCase();
-        String message = String.format("parameter's type is mistake, value is %s, value's type is %s, required type is %s",
-                ex.getValue(), valueType, rvalueType);
+        Object value = ex.getValue();
+        String message = String.format("参数类型不正确：%s", value);
         return processException(HttpStatus.BAD_REQUEST, message);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ResultBean> processRequestParameterError(MissingServletRequestParameterException ex) {
-        logger.error(ex.getMessage(), ex);
-        return processException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        logger.warn(ex.getMessage());
+        return processException(HttpStatus.BAD_REQUEST, "缺少参数：" + ex.getParameterName());
     }
 
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<ResultBean> processBindValidError(BindException e){
-        logger.error(e.getMessage(), e);
+    public ResponseEntity<ResultBean> processBindValidError(BindException e) {
+        logger.warn(e.getMessage());
         FieldError fieldError = e.getBindingResult().getFieldError();
-        return processException(HttpStatus.BAD_REQUEST, fieldError.getField() + ":" + fieldError.getDefaultMessage());
+        String message = fieldError == null ? "参数校验失败" : fieldError.getField() + ":" + fieldError.getDefaultMessage();
+        return processException(HttpStatus.BAD_REQUEST, message);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Object validError(MethodArgumentNotValidException e){
-        logger.error(e.getMessage(), e);
+    public ResponseEntity<ResultBean> validError(MethodArgumentNotValidException e) {
+        logger.warn(e.getMessage());
         FieldError fieldError = e.getBindingResult().getFieldError();
-        return processException(HttpStatus.BAD_REQUEST, fieldError.getField() + ":" + fieldError.getDefaultMessage());
+        String message = fieldError == null ? "参数校验失败" : fieldError.getField() + ":" + fieldError.getDefaultMessage();
+        return processException(HttpStatus.BAD_REQUEST, message);
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ResultBean> processAccessDeniedError(AccessDeniedException ex) {
-        logger.error(ex.getMessage(), ex);
-        return processException(HttpStatus.FORBIDDEN);
+    /**
+     * 未登录 / 登录态失效
+     */
+    @ExceptionHandler(UnauthenticatedException.class)
+    public ResponseEntity<ResultBean> processUnauthenticated(UnauthenticatedException ex) {
+        logger.warn(ex.getMessage());
+        return processException(HttpStatus.UNAUTHORIZED, "登录已失效，请重新登录");
+    }
+
+    /**
+     * 已登录但没有权限
+     */
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<ResultBean> processAccessDeniedError(AuthorizationException ex) {
+        logger.warn(ex.getMessage());
+        return processException(HttpStatus.FORBIDDEN, "没有操作权限");
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ResultBean> processMethodNotSupportedError(HttpRequestMethodNotSupportedException ex) {
-        logger.error(ex.getMessage(), ex);
+        logger.warn(ex.getMessage());
         return processException(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     @ExceptionHandler(BussinessException.class)
     public ResponseEntity<ResultBean> processCustomError(BussinessException ex) {
-        logger.error(ex.getMessage(), ex);
+        logger.warn(ex.getMessage());
         return new ResponseEntity<>(ResultBean.error(ex.getCode(), ex.getMessage()), HttpStatus.OK);
     }
 
@@ -81,15 +94,11 @@ public class ExceptionTranslator {
         return processException(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    /**
-     * 不使用restful格式返回
-     */
-    private ResponseEntity<ResultBean> processException(HttpStatus httpStatus){
-        return new ResponseEntity<>(ResultBean.error(httpStatus.value(), httpStatus.getReasonPhrase()), HttpStatus.OK);
+    private ResponseEntity<ResultBean> processException(HttpStatus httpStatus) {
+        return processException(httpStatus, httpStatus.getReasonPhrase());
     }
 
-    private ResponseEntity<ResultBean> processException(HttpStatus httpStatus, String message){
-        return new ResponseEntity<>(ResultBean.error(httpStatus.value(),message),
-                HttpStatus.OK);
+    private ResponseEntity<ResultBean> processException(HttpStatus httpStatus, String message) {
+        return new ResponseEntity<>(ResultBean.error(httpStatus.value(), message), HttpStatus.OK);
     }
 }
